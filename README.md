@@ -1,0 +1,1 @@
+Code for the paper "Movement- and Traffic-based User Identification in Commercial Virtual Reality Applications: Threats and Opportunities," by S. Baldoni, S. Benhamadi, F. Chiariotti, F. Battisti, and M. Zorzi, to be presented at IEEE VR 2025.
