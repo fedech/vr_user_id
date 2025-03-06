@@ -34,31 +34,22 @@ class ClassifierEvaluator:
 
     def __init__(self, SEED=42):
         self.classifiers = [
-            ['SVC', SVC(kernel="rbf", C=0.025, probability=True, random_state=SEED)],
             ['ExtraTreesClassifier', ExtraTreesClassifier(bootstrap=False, max_depth=None,
                                                           min_samples_split=2, n_estimators=800,
                                                           random_state=SEED)],
-            ["LinearDiscriminantAnalysis", LinearDiscriminantAnalysis()],
-            ['DecisionTreeClassifier', DecisionTreeClassifier(random_state=SEED)],
-            ['KNeighborsClassifier', KNeighborsClassifier()],
             ['RandomForestClassifier', RandomForestClassifier(random_state=SEED)],
-            ['MLPClassifier', MLPClassifier(random_state=SEED)],
-            ['AdaBoostClassifier', AdaBoostClassifier(random_state=SEED)],
-            ['GaussianNB', GaussianNB()],
             ['QuadraticDiscriminantAnalysis', QuadraticDiscriminantAnalysis(store_covariance=True)],
             ['LogisticRegression', LogisticRegression(random_state=SEED)],
-            ['BernoulliNB', BernoulliNB()],
-            ['BaggingClassifier', BaggingClassifier(random_state=SEED)],
             ['LGBMClassifier', LGBMClassifier(random_state=SEED, verbosity=-1)]
         ]
         
         # Add the VotingClassifier
         voting_classifiers = [
-            ('ET', self.classifiers[1][1]),  # ExtraTreesClassifier
-            ('LGBM', self.classifiers[-1][1]),  # LGBMClassifier
-            ('LR', self.classifiers[10][1]),  # LogisticRegression
-            ('QDA', self.classifiers[9][1]),  # QuadraticDiscriminantAnalysis
-            ('RF', self.classifiers[5][1])  # RandomForestClassifier
+            ('ET', self.classifiers[0][1]),  # ExtraTreesClassifier
+            ('LGBM', self.classifiers[4][1]),  # LGBMClassifier
+            ('LR', self.classifiers[3][1]),  # LogisticRegression
+            ('QDA', self.classifiers[2][1]),  # QuadraticDiscriminantAnalysis
+            ('RF', self.classifiers[1][1])  # RandomForestClassifier
         ]
         
         voting_classifier = VotingClassifier(
@@ -98,7 +89,7 @@ class ClassifierEvaluator:
         best_score = 0
         best_model = None
         cm = None
-        Evaluation_set = pd.DataFrame(index=None, columns=['Model', 'Silhouette', 
+        Evaluation_set = pd.DataFrame(index=None, columns=['Model', 'Silhouette',
                                                         'Calinski_Harabasz',])
 
         for i in tqdm(range(len(self.clustering_algorithms))):
@@ -121,7 +112,7 @@ class ClassifierEvaluator:
                 best_score = calinski_harabasz
 
             Evaluation_set = pd.concat([Evaluation_set, pd.DataFrame({'Model': [name], 'Silhouette': [silhouette],
-                                                          'Calinski_Harabasz': [calinski_harabasz]})], 
+                                                          'Calinski_Harabasz': [calinski_harabasz]})],
                            ignore_index=True)
 
         return Evaluation_set, models, best_model, cm
